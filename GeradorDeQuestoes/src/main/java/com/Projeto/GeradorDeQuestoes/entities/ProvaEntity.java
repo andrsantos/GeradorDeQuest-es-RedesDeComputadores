@@ -1,0 +1,45 @@
+package com.Projeto.GeradorDeQuestoes.entities;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "tb_provas")
+public class ProvaEntity {
+
+    @Id
+    private UUID id;
+
+    @Column(name = "titulo")
+    private String titulo;
+
+    @Column(name = "data_criacao", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private OffsetDateTime dataCriacao;
+
+    @OneToMany(
+        mappedBy = "prova",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<QuestaoProvaEntity> questoes = new ArrayList<>();
+
+    // Getters e Setters
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public OffsetDateTime getDataCriacao() { return dataCriacao; }
+    public void setDataCriacao(OffsetDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+    public List<QuestaoProvaEntity> getQuestoes() { return questoes; }
+    public void setQuestoes(List<QuestaoProvaEntity> questoes) { this.questoes = questoes; }
+
+    // Método auxiliar para adicionar questão e manter a consistência
+    public void addQuestao(QuestaoProvaEntity questao) {
+        questoes.add(questao);
+        questao.setProva(this);
+    }
+}

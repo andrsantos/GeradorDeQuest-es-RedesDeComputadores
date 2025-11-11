@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/questoes")
+@CrossOrigin(origins = "http://localhost:4200")
 public class GeradorQuestoesController {
 
     private final GeradorQuestaoService geradorQuestaoService;

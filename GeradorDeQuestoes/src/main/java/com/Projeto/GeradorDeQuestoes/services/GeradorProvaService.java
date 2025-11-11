@@ -3,8 +3,15 @@ package com.Projeto.GeradorDeQuestoes.services;
 import com.Projeto.GeradorDeQuestoes.dto.GerarQuestaoRequest;
 import com.Projeto.GeradorDeQuestoes.dto.ListaQuestoes;
 import com.Projeto.GeradorDeQuestoes.dto.Prova;
+import com.Projeto.GeradorDeQuestoes.dto.Questao;
+import com.Projeto.GeradorDeQuestoes.entities.ProvaEntity;
+import com.Projeto.GeradorDeQuestoes.entities.QuestaoProvaEntity;
+import com.Projeto.GeradorDeQuestoes.repositories.ProvaRepository;
+
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,20 +19,24 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GeradorProvaService {
 
-   
     private static final Map<UUID, Prova> provasEmMemoria = new ConcurrentHashMap<>();
-
     private final GeradorQuestaoService questaoService;
+    private final ProvaRepository provaRepository;
+    private final PdfService pdfService;
 
-    public GeradorProvaService(GeradorQuestaoService questaoService) {
+    public GeradorProvaService(GeradorQuestaoService questaoService, 
+    ProvaRepository provaRepository, 
+    PdfService pdfService
+    ) {
         this.questaoService = questaoService;
+        this.provaRepository = provaRepository;
+        this.pdfService = pdfService;
     }
 
   
     public Prova criarNovaProva() {
         Prova novaProva = new Prova();
         provasEmMemoria.put(novaProva.getId(), novaProva);
-        System.out.println("SERVICE: Nova prova criada. ID: " + novaProva.getId());
         return novaProva;
     }
 
@@ -45,8 +56,6 @@ public class GeradorProvaService {
 
         novasQuestoes.questoes().forEach(prova::adicionarQuestao);
 
-        System.out.println("SERVICE: Adicionadas " + novasQuestoes.questoes().size() 
-                         + " questões à prova " + idProva);
         return prova;
     }
 
@@ -56,10 +65,38 @@ public class GeradorProvaService {
         if (prova == null) {
             throw new RuntimeException("Prova não encontrada!");
         }
-
-        System.out.println("SERVICE: Removendo questão índice " + indiceQuestao 
-                         + " da prova " + idProva);
         prova.removerQuestao(indiceQuestao);
         return prova;
+    }
+
+    public byte[] finalizarEGerarPdf(UUID idProva) throws IOException {
+        Prova provaEmMemoria = getProva(idProva);
+        if (provaEmMemoria == null) {
+            throw new RuntimeException("Prova não encontrada!");
+        }
+
+        ProvaEntity provaEntity = new ProvaEntity();
+        provaEntity.setId(provaEmMemoria.getId());
+        provaEntity.setDataCriacao(OffsetDateTime.now());
+        provaEntity.setTitulo("Prova de Redes - " + provaEmMemoria.getId().toString().substring(0, 8));
+
+        for (Questao questaoDto : provaEmMemoria.getQuestoes()) {
+            QuestaoProvaEntity questaoEntity = new QuestaoProvaEntity();
+            questaoEntity.setEnunciado(questaoDto.enunciado());
+            questaoEntity.setAlternativas(questaoDto.alternativas());
+            questaoEntity.setRespostaCorreta(questaoDto.respostaCorreta());
+            
+            provaEntity.addQuestao(questaoEntity); 
+        }
+
+        provaRepository.save(provaEntity);
+
+        byte[] pdfBytes = pdfService.gerarPdfProva(provaEmMemoria);
+        System.out.println("SERVICE: PDF gerado para prova " + idProva);
+
+        provasEmMemoria.remove(idProva);
+        System.out.println("SERVICE: Prova " + idProva + " removida da memória.");
+        
+        return pdfBytes;
     }
 }

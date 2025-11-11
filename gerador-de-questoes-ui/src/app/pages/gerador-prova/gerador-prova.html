@@ -1,0 +1,69 @@
+<div class="container">
+  
+  <header>
+    <h1>Gerador de Provas</h1>
+
+    <button (click)="onCriarProva()" [disabled]="isLoadingCriar">
+        <span *ngIf="!isLoadingCriar">1. Criar Nova Prova</span>
+        <span *ngIf="isLoadingCriar" class="loader"></span>
+    </button>
+    <div *ngIf="provaId" class="form-gerar">
+      <hr>
+      <h3>Adicionar Questões à Prova: {{ provaId }}</h3>
+      
+      <div>
+        <label for="topico">Tópico:</label>
+        <input id="topico" [(ngModel)]="topico">
+      </div>
+      <div>
+        <label for="quantidade">Quantidade:</label>
+        <input id="quantidade" type="number" [(ngModel)]="quantidade">
+      </div>
+
+    <button (click)="onAdicionarQuestoes()" [disabled]="isLoadingAdicionar">
+        <span *ngIf="!isLoadingAdicionar">2. Gerar e Adicionar Questões</span>
+        <span *ngIf="isLoadingAdicionar" class="loader"></span>
+    </button>      
+    <hr>
+    </div>
+  </header>
+
+  <main *ngIf="prova$ | async as prova">
+    <h2>Prova ID: {{ prova.id }}</h2>
+
+    <div *ngIf="prova.questoes.length === 0">
+      <p>Nenhuma questão na prova ainda. Use o formulário acima para adicionar.</p>
+    </div>
+
+    <div *ngIf="prova.questoes.length > 0" class="lista-questoes">
+      
+      <div class="questao" *ngFor="let questao of prova.questoes; let i = index">
+        <h3>{{ i + 1 }}. {{ questao.enunciado }}</h3>
+        
+        <ul *ngIf="questao.alternativas">
+          <li><strong>A)</strong> {{ questao.alternativas['a'] }}</li>
+          <li><strong>B)</strong> {{ questao.alternativas['b'] }}</li>
+          <li><strong>C)</strong> {{ questao.alternativas['c'] }}</li>
+          <li><strong>D)</strong> {{ questao.alternativas['d'] }}</li>
+        </ul>
+        
+        <p><strong>Resposta Correta:</strong> {{ questao.respostaCorreta }}</p>
+
+        <button class="btn-descartar" (click)="onDescartarQuestao(i)" [disabled]="descartandoIndex === i">
+        <span *ngIf="descartandoIndex !== i">Descartar Questão</span>
+        <span *ngIf="descartandoIndex === i" class="loader"></span>
+        </button>
+      </div>
+
+    </div>
+
+    <footer *ngIf="prova.questoes.length > 0" class="rodape-prova">
+      <hr>
+        <button class="btn-finalizar" (click)="onFinalizarProva()" [disabled]="isLoadingFinalizar">
+        <span *ngIf="!isLoadingFinalizar">3. Salvar e Gerar PDF da Prova</span>
+        <span *ngIf="isLoadingFinalizar" class="loader"></span>
+        </button>
+    </footer>
+
+  </main>
+</div>

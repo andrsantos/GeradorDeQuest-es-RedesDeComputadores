@@ -5,11 +5,13 @@ import com.Projeto.GeradorDeQuestoes.dto.Prova;
 import com.Projeto.GeradorDeQuestoes.services.GeradorProvaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/provas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class GeradorProvaController {
 
     private final GeradorProvaService provaService;
@@ -59,6 +61,26 @@ public class GeradorProvaController {
             return ResponseEntity.ok(prova); 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/finalizar-pdf")
+    public ResponseEntity<byte[]> finalizarEBaixarPdf(@PathVariable UUID id) {
+        try {
+            byte[] pdfBytes = provaService.finalizarEGerarPdf(id);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "prova_" + id + ".pdf");
+            headers.setContentLength(pdfBytes.length);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
