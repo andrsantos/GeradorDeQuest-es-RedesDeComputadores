@@ -1,0 +1,17 @@
+<nav class="sidebar-container">
+  <div class="sidebar-header">
+    <h3>Gerador de Provas</h3>
+    <span>Redes de Computadores</span>
+  </div>
+
+  <ul class="sidebar-nav-list">
+    <li *ngFor="let link of navLinks">
+      <a 
+        [routerLink]="link.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: link.exact }">
+        {{ link.label }}
+      </a>
+    </li>
+  </ul>
+</nav>
