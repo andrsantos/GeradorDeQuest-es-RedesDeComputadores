@@ -3,6 +3,9 @@ package com.Projeto.GeradorDeQuestoes.entities;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,6 +17,7 @@ public class QuestaoProvaEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prova_id", nullable = false)
     private ProvaEntity prova;

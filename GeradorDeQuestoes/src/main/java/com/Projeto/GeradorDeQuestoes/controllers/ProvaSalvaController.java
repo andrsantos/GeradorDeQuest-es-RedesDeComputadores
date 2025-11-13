@@ -1,0 +1,104 @@
+package com.Projeto.GeradorDeQuestoes.controllers;
+import com.Projeto.GeradorDeQuestoes.dto.Prova;
+import com.Projeto.GeradorDeQuestoes.dto.ProvaInfoDTO;
+import com.Projeto.GeradorDeQuestoes.dto.Questao;
+import com.Projeto.GeradorDeQuestoes.entities.ProvaEntity;
+import com.Projeto.GeradorDeQuestoes.repositories.ProvaRepository;
+import com.Projeto.GeradorDeQuestoes.services.PdfService;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/provas-salvas")
+@CrossOrigin(origins = "http://localhost:4200") 
+public class ProvaSalvaController {
+
+    private final ProvaRepository provaRepository;
+    private final PdfService pdfService;
+
+
+    public ProvaSalvaController(ProvaRepository provaRepository, PdfService pdfService) {
+        this.provaRepository = provaRepository;
+        this.pdfService = pdfService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProvaInfoDTO>> getListaProvas() {
+        List<ProvaInfoDTO> provas = provaRepository.findAllWithInfo();
+        return ResponseEntity.ok(provas);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProvaEntity> getDetalheProva(@PathVariable UUID id) {
+        return provaRepository.findById(id)
+                .map(ResponseEntity::ok) 
+                .orElse(ResponseEntity.notFound().build()); 
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirProva(@PathVariable UUID id) {
+        if (!provaRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        provaRepository.deleteById(id);
+        System.out.println("CONTROLLER: Prova " + id + " excluída.");
+        return ResponseEntity.noContent().build(); 
+    }
+
+    @GetMapping("/{id}/download-pdf")
+    public ResponseEntity<byte[]> baixarProvaPdf(@PathVariable UUID id) {
+        
+        ProvaEntity provaEntity = provaRepository.findById(id).orElse(null);
+        if (provaEntity == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            Prova provaDto = convertEntityToDto(provaEntity);
+            
+            byte[] pdfBytes = pdfService.gerarPdfProva(provaDto);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "prova_" + id + ".pdf");
+            headers.setContentLength(pdfBytes.length);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+  
+    private Prova convertEntityToDto(ProvaEntity entity) {
+        Prova provaDto = new Prova(); 
+        
+        List<Questao> questoesDto = entity.getQuestoes().stream()
+                .map(qe -> new Questao( 
+                        qe.getEnunciado(),
+                        qe.getAlternativas(),
+                        qe.getRespostaCorreta()
+                ))
+                .collect(Collectors.toList());
+
+        questoesDto.forEach(provaDto::adicionarQuestao);
+        
+        return provaDto;
+    }
+}

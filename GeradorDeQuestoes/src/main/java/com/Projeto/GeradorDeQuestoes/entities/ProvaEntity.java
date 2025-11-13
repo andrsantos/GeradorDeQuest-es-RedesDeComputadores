@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tb_provas")
 public class ProvaEntity {
@@ -19,7 +21,9 @@ public class ProvaEntity {
     @Column(name = "data_criacao", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime dataCriacao;
+    
 
+    @JsonManagedReference
     @OneToMany(
         mappedBy = "prova",
         cascade = CascadeType.ALL,

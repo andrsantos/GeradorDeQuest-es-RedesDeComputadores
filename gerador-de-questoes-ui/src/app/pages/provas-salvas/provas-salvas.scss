@@ -1,0 +1,78 @@
+:host {
+  display: block;
+}
+
+.container {
+  max-width: 1000px;
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--cor-secundaria);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* Estado de "lista vazia" */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--cor-cartao);
+  border: 1px dashed var(--cor-borda);
+  border-radius: var(--raio-borda);
+}
+
+/* Grid de cards (similar ao Dashboard) */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  display: block;
+  background-color: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 1.5rem;
+  box-shadow: var(--sombra-cartao);
+  text-decoration: none;
+  color: var(--cor-texto);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative; /* Para o link de detalhe */
+  padding-bottom: 4rem; /* Espaço para o "clique para ver" */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--cor-primaria);
+}
+
+.card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.card p strong {
+  color: var(--cor-texto);
+}
+
+.link-detalhe {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-weight: 500;
+  color: var(--cor-primaria);
+}

@@ -1,0 +1,70 @@
+<div *ngIf="prova$ | async as prova; else loading">
+  
+  <div class="detalhe-header">
+    <div>
+      <h1>{{ prova.titulo || 'Detalhe da Prova' }}</h1>
+      <p class="subtitle">
+        ID: {{ prova.id }} <br>
+        Salva em: {{ prova.dataCriacao | date:'dd/MM/yyyy \'às\' HH:mm' }}
+      </p>
+    </div>
+    
+    <!-- ÁREA DE BOTÕES -->
+    <div class="botoes-acao">
+      <!-- BOTÃO DE VOLTAR -->
+      <a [routerLink]="['/provas-salvas']" class="btn-voltar">
+        &larr; Voltar
+      </a>
+      
+      <!-- BOTÃO DE DOWNLOAD -->
+      <button class="btn-download" (click)="onDownloadPdf()" [disabled]="isDownloading">
+        <span *ngIf="!isDownloading">Baixar PDF</span>
+        <span *ngIf="isDownloading" class="loader"></span>
+      </button>
+
+      <!-- BOTÃO DE EXCLUIR -->
+      <button class="btn-excluir" (click)="openDeleteModal()" [disabled]="isDeleting">
+        <span *ngIf="!isDeleting">Excluir Prova</span>
+        <span *ngIf="isDeleting" class="loader"></span>
+      </button>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="lista-questoes">
+    <div class="questao" *ngFor="let questao of prova.questoes; let i = index">
+      <h3>{{ i + 1 }}. {{ questao.enunciado }}</h3>
+      <ul *ngIf="questao.alternativas">
+        <li><strong>A)</strong> {{ questao.alternativas['a'] }}</li>
+        <li><strong>B)</strong> {{ questao.alternativas['b'] }}</li>
+        <li><strong>C)</strong> {{ questao.alternativas['c'] }}</li>
+        <li><strong>D)</strong> {{ questao.alternativas['d'] }}</li>
+      </ul>
+      <p><strong>Resposta Correta:</strong> {{ questao.respostaCorreta }}</p>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #loading>
+  <p>Carregando detalhes da prova...</p>
+</ng-template>
+
+
+
+<div class="modal-overlay" *ngIf="isDeleteModalVisible">
+  <div class="modal-box">
+    <h3>Confirmar Exclusão</h3>
+    <p>Você tem certeza que deseja excluir esta prova? Esta ação não pode ser desfeita.</p>
+    <div class="modal-botoes">
+      <button class="btn-modal-cancelar" (click)="closeDeleteModal()" [disabled]="isDeleting">
+        Cancelar
+      </button>
+      <button class="btn-modal-confirmar" (click)="onConfirmDelete()" [disabled]="isDeleting">
+        <span *ngIf="!isDeleting">Sim, Excluir</span>
+        <span *ngIf="isDeleting" class="loader"></span>
+      </button>
+    </div>
+  </div>
+</div>

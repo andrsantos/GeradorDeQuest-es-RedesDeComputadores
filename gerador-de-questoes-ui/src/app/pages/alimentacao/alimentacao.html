@@ -1,0 +1,88 @@
+<div class="container">
+  <h1>Alimentação do RAG (Contexto)</h1>
+  <p class="subtitle">Faça o upload de arquivos PDF (capítulos de livros, artigos, etc.) para ensinar o sistema.</p>
+
+  <!-- Seção de Upload -->
+  <div class="upload-section">
+    
+    <!-- 1. O Dropzone (se nenhum arquivo foi selecionado) -->
+    <div 
+      class="dropzone"
+      *ngIf="!arquivo"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      [class.drag-over]="isHovering"
+    >
+      <input 
+        type="file" 
+        id="fileInput" 
+        (change)="onFileSelected($event)" 
+        accept=".pdf" 
+        hidden
+      >
+      <!-- Ícone SVG de Upload (do Dashboard) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--cor-primaria)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+      
+      <p>Arraste e solte um arquivo PDF aqui</p>
+      <p>ou</p>
+      <label for="fileInput" class="btn-selecionar">
+        Selecione um arquivo
+      </label>
+    </div>
+
+    <!-- 2. O Arquivo Selecionado (se um arquivo foi selecionado) -->
+    <div class="arquivo-selecionado" *ngIf="arquivo">
+      <h3>Arquivo Pronto para Upload</h3>
+      
+      <!-- Detalhes do arquivo -->
+      <div class="arquivo-info">
+        <span>{{ arquivo.name }}</span>
+        <span class="arquivo-tamanho">
+          ({{ (arquivo.size / 1024 / 1024) | number:'1.1-2' }} MB)
+        </span>
+        <button (click)="removerArquivo()" class="btn-remover">
+          &times; <!-- Símbolo de "X" -->
+        </button>
+      </div>
+
+      <!-- Campo Tópico -->
+      <div class="form-group">
+        <label for="topico">Associar ao Tópico:</label>
+        <input 
+          id="topico" 
+          [(ngModel)]="topico"
+          placeholder="Ex: Modelo OSI, TCP/IP"
+          [disabled]="uploadProgress !== null"
+        >
+      </div>
+
+      <!-- Barra de Progresso e Botão de Upload -->
+      <div class="progresso-container" *ngIf="uploadProgress === null && !isProcessing">
+        <button (click)="iniciarUpload()" class="btn-upload">
+          Iniciar Processamento
+        </button>
+      </div>
+
+      <!-- Feedback de Progresso/Processamento -->
+      <div *ngIf="uploadProgress !== null">
+        <!-- Barra de Progresso -->
+        <div class="barra-progresso">
+          <div 
+            class="barra-progresso-interna" 
+            [style.width.%]="uploadProgress">
+          </div>
+        </div>
+        <span class="progresso-texto">
+          {{ uploadProgress }}%
+        </span>
+      </div>
+
+      <div *ngIf="isProcessing" class="processando-texto">
+        <span class="loader-small"></span>
+        Processando o arquivo no servidor... (Isso pode levar alguns segundos)
+      </div>
+
+    </div>
+  </div>
+</div>

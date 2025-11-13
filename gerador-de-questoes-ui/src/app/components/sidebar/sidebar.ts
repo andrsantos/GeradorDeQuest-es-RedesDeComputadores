@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router'; 
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive], 
-  templateUrl: './sidebar.html', 
-  styleUrls: ['./sidebar.scss']   
-  
+  imports: [CommonModule, RouterLink, RouterLinkActive],
+  templateUrl: './sidebar.html',
+  styleUrls: ['./sidebar.scss']
 })
 export class Sidebar {
   navLinks = [
@@ -16,8 +15,6 @@ export class Sidebar {
     { path: '/gerar-prova', label: 'Gerar Prova', exact: false },
     { path: '/provas-salvas', label: 'Provas Salvas', exact: false },
     { path: '/banco-questoes', label: 'Banco de Questões', exact: false },
-    { path: '/alimentacao', label: 'Alimentação', exact: false },
-    { path: '/lorem-1', label: 'Lorem Ipsum', exact: false },
-    { path: '/lorem-2', label: 'Dolor Sit Amet', exact: false },
+    { path: '/alimentacao', label: 'Alimentação', exact: false }
   ];
 }

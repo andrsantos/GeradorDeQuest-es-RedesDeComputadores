@@ -5,6 +5,7 @@ import { ProvaService } from '../../services/prova/prova-service';
 import { GerarQuestaoRequest } from '../../models/gerar-questao-request.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-gerador-prova',
@@ -23,7 +24,7 @@ export class GeradorProva {
   isLoadingFinalizar = false;
   descartandoIndex: number | null = null;
 
-  constructor(private provaService: ProvaService) { }
+  constructor(private provaService: ProvaService, private toastr: ToastrService) { }
 
   
 
@@ -90,6 +91,7 @@ export class GeradorProva {
         this.prova$ = null;
         this.provaId = null;
         this.isLoadingFinalizar = false;
+        this.toastr.success("Prova gerada com sucesso!", 'Sucesso!');
       },
       error: (err) => {
         console.error("Erro ao finalizar a prova:", err);

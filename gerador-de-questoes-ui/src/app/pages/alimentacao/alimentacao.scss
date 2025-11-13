@@ -1,0 +1,161 @@
+:host {
+  display: block;
+}
+.container {
+  max-width: 800px;
+}
+h1 {
+  margin-top: 0;
+  color: var(--cor-secundaria);
+}
+.subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* --- Dropzone --- */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem;
+  border: 2px dashed var(--cor-borda);
+  border-radius: var(--raio-borda);
+  background-color: #fff;
+  transition: background-color 0.2s ease;
+}
+.dropzone.drag-over {
+  background-color: #e6f0ff; /* Azul claro (do card) */
+  border-color: var(--cor-primaria);
+}
+.dropzone p {
+  margin: 0.25rem 0;
+  font-weight: 500;
+  color: var(--cor-secundaria);
+}
+.btn-selecionar {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--raio-borda);
+  cursor: pointer;
+  background-color: var(--cor-secundaria);
+  color: white;
+  margin-top: 0.5rem;
+}
+
+/* --- Arquivo Selecionado --- */
+.arquivo-selecionado {
+  background-color: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 2rem;
+}
+
+.arquivo-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--cor-fundo);
+  border-radius: var(--raio-borda);
+  font-weight: 500;
+}
+.arquivo-tamanho {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+.btn-remover {
+  margin-left: auto; /* Joga o X para o final */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--cor-perigo);
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+
+/* --- Formulário --- */
+.form-group {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  font-size: 1rem;
+  box-sizing: border-box; /* Garante que o padding não estoure */
+}
+.form-group input:disabled {
+  background-color: var(--cor-fundo);
+}
+
+/* --- Progresso e Upload --- */
+.btn-upload {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--raio-borda);
+  cursor: pointer;
+  background-color: var(--cor-primaria);
+  color: white;
+}
+.btn-upload:hover { opacity: 0.9; }
+
+.barra-progresso {
+  width: 100%;
+  height: 20px;
+  background-color: var(--cor-borda);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+.barra-progresso-interna {
+  height: 100%;
+  width: 0%; /* Controlado pelo [style.width.%] */
+  background-color: var(--cor-sucesso);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+.progresso-texto {
+  display: block;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Loader pequeno */
+.loader-small {
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid var(--cor-borda);
+  border-bottom-color: var(--cor-primaria); /* Azul */
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  vertical-align: middle;
+  line-height: 1;
+  margin-right: 0.5rem;
+}
+.processando-texto {
+  font-weight: 500;
+  color: var(--cor-secundaria);
+  margin-top: 1rem;
+}
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

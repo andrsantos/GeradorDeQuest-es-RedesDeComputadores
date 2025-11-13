@@ -1,0 +1,217 @@
+:host {
+  display: block;
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--cor-secundaria);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* Estilo do botão "Voltar" */
+.btn-voltar {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--raio-borda);
+  cursor: pointer;
+  background-color: var(--cor-secundaria);
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.btn-voltar:hover {
+  opacity: 0.9;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--cor-borda);
+  margin-bottom: 2rem;
+}
+
+/* --- ESTILOS DAS QUESTÕES (COPIADOS) --- */
+/* Esta parte é crucial para a consistência visual.
+   É o mesmo estilo da página 'gerador-prova'.
+*/
+
+.lista-questoes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre cada cartão de questão */
+}
+
+.questao {
+  background-color: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 1.5rem;
+  box-shadow: var(--sombra-cartao);
+}
+
+.questao h3 {
+  margin-top: 0;
+  color: var(--cor-texto);
+}
+
+/* Alternativas */
+.questao ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+
+.questao li {
+  padding: 0.5rem 0;
+  color: #495057; /* Cor de texto um pouco mais suave */
+}
+
+/* Resposta Correta (Verde) */
+.questao p {
+  font-weight: 500;
+  color: var(--cor-sucesso);
+}
+
+.detalhe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinha no topo */
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap; 
+  gap: 1rem;
+}
+
+/* Container para os botões de ação */
+.botoes-acao {
+  display: flex;
+  gap: 0.75rem; /* Espaço entre os botões */
+  flex-wrap: wrap; /* Quebra em telas menores */
+}
+
+/* Botão genérico (base) */
+.botoes-acao button,
+.btn-voltar {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--raio-borda);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  min-width: 120px; /* Largura mínima */
+  text-align: center;
+}
+
+.btn-voltar {
+  background-color: var(--cor-secundaria);
+  color: white;
+}
+.btn-voltar:hover { opacity: 0.9; }
+
+.btn-download {
+  background-color: var(--cor-primaria); /* Azul */
+  color: white;
+}
+.btn-download:hover { opacity: 0.9; }
+
+.btn-excluir {
+  background-color: var(--cor-perigo); /* Vermelho */
+  color: white;
+}
+.btn-excluir:hover { opacity: 0.9; }
+
+/* Loader (copiado do gerador-prova.css) */
+.loader {
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-bottom-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+
+/* --- ESTILOS DO MODAL --- */
+
+.modal-overlay {
+  position: fixed; /* Fica por cima de tudo */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background-color: var(--cor-cartao);
+  padding: 2rem;
+  border-radius: var(--raio-borda);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  z-index: 1001;
+}
+
+.modal-box h3 {
+  margin-top: 0;
+  color: var(--cor-perigo);
+}
+
+.modal-botoes {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end; /* Alinha botões à direita */
+  gap: 0.75rem;
+}
+
+.btn-modal-cancelar,
+.btn-modal-confirmar {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--raio-borda);
+  cursor: pointer;
+}
+
+.btn-modal-cancelar {
+  background-color: var(--cor-secundaria);
+  color: white;
+}
+.btn-modal-cancelar:hover { opacity: 0.9; }
+
+.btn-modal-confirmar {
+  background-color: var(--cor-perigo);
+  color: white;
+  min-width: 110px; /* Espaço para o loader */
+  text-align: center;
+}
+.btn-modal-confirmar:hover { opacity: 0.9; }
